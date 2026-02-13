@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>NIE DOTYKAĆ...</title>
+
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    background:black;
+    font-family:Impact,sans-serif;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+#btn{
+    padding:20px 40px;
+    font-size:30px;
+    border:none;
+    border-radius:12px;
+    background:red;
+    color:white;
+    cursor:pointer;
+}
+
+#mainText{
+    position:absolute;
+    font-size:70px;
+    display:none;
+    animation:bounce 0.15s infinite;
+}
+
+@keyframes bounce{
+    0%{transform:translateY(-40px);}
+    50%{transform:translateY(40px);}
+    100%{transform:translateY(-40px);}
+}
+
+@keyframes chaosBg{
+    0%{background:black;}
+    25%{background:red;}
+    50%{background:blue;}
+    75%{background:lime;}
+    100%{background:black;}
+}
+
+@keyframes fly{
+    from{transform:translate(-100px,0);}
+    to{transform:translate(110vw,100vh);}
+}
+
+.flying{
+    position:absolute;
+    width:150px;
+    animation:fly 6s linear infinite;
+}
+
+#jumpscare{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:black;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    font-size:200px;
+    animation:glitch 0.1s infinite;
+}
+
+@keyframes glitch{
+    0%{transform:translate(0);}
+    20%{transform:translate(-10px,10px);}
+    40%{transform:translate(10px,-10px);}
+    60%{transform:translate(-5px,5px);}
+    80%{transform:translate(5px,-5px);}
+    100%{transform:translate(0);}
+}
+</style>
+</head>
+<body>
+
+<button id="btn">NIE DOTYKAĆ</button>
+
+<div id="mainText">MIAŁEŚ NIE DOTYKAĆ</div>
+
+<div id="jumpscare">🐷</div>
+
+<!-- Jumpscare sound -->
+<audio id="sound">
+<source src="https://www.myinstants.com/media/sounds/movie_1.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Barka lokalna -->
+<audio id="barka" src="barka.mp3"></audio>
+
+<script>
+const btn=document.getElementById("btn");
+const text=document.getElementById("mainText");
+const jumpscare=document.getElementById("jumpscare");
+const sound=document.getElementById("sound");
+const barka=document.getElementById("barka");
+
+btn.onclick=()=>{
+    btn.style.display="none";
+    text.style.display="block";
+
+    setInterval(()=>{
+        text.style.color=`rgb(${Math.random()*255},${Math.random()*255},${Math.random()*255})`;
+    },50);
+
+    setTimeout(()=>{
+        jumpscare.style.display="flex";
+        sound.play();
+    },2000);
+
+    setTimeout(()=>{
+        jumpscare.style.display="none";
+        startChaos();
+    },3500);
+};
+
+function startChaos(){
+    document.body.style.animation="chaosBg 0.3s infinite";
+    barka.play();
+
+    for(let i=0;i<15;i++){
+        const img=document.createElement("img");
+        img.src="https://upload.wikimedia.org/wikipedia/commons/5/5d/John_Paul_II_1982.jpg";
+        img.className="flying";
+        img.style.top=Math.random()*100+"vh";
+        img.style.left=Math.random()*100+"vw";
+        document.body.appendChild(img);
+    }
+}
+</script>
+
+</body>
+</html>
